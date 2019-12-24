@@ -1,6 +1,8 @@
-﻿
+﻿@model MVC_project.ModelView.LoginViewModel
+@using MVC_project.Models;
 @{
-    ViewBag.Title = "Login";
+    
+ 
 }
 <div class="jumbotron">
     <h1>SCE - Software Department</h1>
@@ -8,25 +10,34 @@
         welcome to SCE software department site!<br />
         please Login.
     </p>
-    <table>
-        <tr>
-            <td>
-                <input type="text" id="username" value="UserName" style="margin:10px ; padding:10px; border-radius:10px 10px 10px 10px" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input type="password" id="password" value="Password" style="margin:10px ; padding:10px; border-radius:10px 10px 10px 10px" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <button class="btn btn-primary btn-lg" style="margin:10px ; padding:10px; width: 100px">Login</button>
-            </td>
-        </tr>
-    </table>
-    <img src="https://ak0.picdn.net/shutterstock/videos/4507700/thumb/6.jpg" style="border-radius: 50% 50% 50% 50%; margin-left:500px; margin-top:-200px"/>
+
+    <form action="Login" method="post">
+
+        <label>User Name:</label><input type="text" id="UserName" name="UserName" style="margin:10px ; padding:10px; border-radius:10px 10px 10px 10px;" />
+        <br />
+        <section style="color:red">
+            @Html.ValidationMessageFor(x => x.login.UserName)
+        </section>
+
+        <label>Password:</label><input type="password" id="Password" name="Password" style="margin:10px ; padding:10px; border-radius:10px 10px 10px 10px; margin-left:15px;" />
+
+        <br />
+        <section style="color:red">
+            @Html.ValidationMessageFor(x => x.login.Password)
+        </section>
+
+        <input class="btn btn-primary btn-lg" style="margin:10px ; padding:10px; width: 100px" id="Login" type="submit" value="Login" />
+
+
+    </form>
+
+
+
+    <img src="https://ak0.picdn.net/shutterstock/videos/4507700/thumb/6.jpg" style="border-radius: 50% 50% 50% 50%; margin-left:275px; margin-top:-200px; width:75%" />
+
 
 </div>
+<ul>
+</ul>
 
 
