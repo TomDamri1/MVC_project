@@ -1,8 +1,8 @@
-﻿@model MVC_project.ModelView.LoginViewModel
+﻿@model MVC_project.Models.Login
 @using MVC_project.Models;
 @{
-    
- 
+
+
 }
 <div class="jumbotron">
     <h1>SCE - Software Department</h1>
@@ -16,14 +16,14 @@
         <label>User Name:</label><input type="text" id="UserName" name="UserName" style="margin:10px ; padding:10px; border-radius:10px 10px 10px 10px;" />
         <br />
         <section style="color:red">
-            @Html.ValidationMessageFor(x => x.login.UserName)
+            @Html.ValidationMessageFor(x => x.UserName)
         </section>
 
         <label>Password:</label><input type="password" id="Password" name="Password" style="margin:10px ; padding:10px; border-radius:10px 10px 10px 10px; margin-left:15px;" />
 
         <br />
         <section style="color:red">
-            @Html.ValidationMessageFor(x => x.login.Password)
+            @Html.ValidationMessageFor(x => x.Password)
         </section>
 
         <input class="btn btn-primary btn-lg" style="margin:10px ; padding:10px; width: 100px" id="Login" type="submit" value="Login" />
@@ -37,7 +37,6 @@
 
 
 </div>
-<ul>
-</ul>
+<ul></ul>
 
 

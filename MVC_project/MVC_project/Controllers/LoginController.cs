@@ -16,9 +16,15 @@ namespace MVC_project.Controllers
         }
 
         // GET: Login/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string id)
         {
-            return View();
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.login_collection =
+                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+
+            var filter = Builders<Models.Login>.Filter.Eq("_id", id);
+            var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
+            return View(result);
         }
 
         // GET: Login/Create
@@ -38,6 +44,8 @@ namespace MVC_project.Controllers
                     Models.MongoHelper.database.GetCollection<Models.Login>("Login");
 
                 Models.MongoHelper.login_collection.InsertOneAsync(new Models.Login {
+                    FirstName = collection["FirstName"],
+                    LastName = collection["LastName"],
                     _id = collection["ID"],
                     ID = collection["ID"],
                     UserName = collection["UserName"],
@@ -54,18 +62,37 @@ namespace MVC_project.Controllers
         }
 
         // GET: Login/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            return View();
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.login_collection =
+                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+
+            var filter = Builders<Models.Login>.Filter.Eq("_id", id);
+            var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
+            return View(result);
         }
 
         // POST: Login/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(string id, FormCollection collection)
         {
             try
             {
-                // TODO: Add update logic here
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.login_collection =
+                    Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+
+                var filter = Builders<Models.Login>.Filter.Eq("_id", id);
+                var update = Builders<Models.Login>.Update
+                    .Set("FirstName", collection["FirstName"])
+                    .Set("LastName", collection["LastName"])
+                    .Set("_id", collection["ID"])
+                    .Set("ID", collection["ID"])
+                    .Set("UserName", collection["UserName"])
+                    .Set("Type", collection["Type"])
+                    .Set("Password", collection["Password"]);
+                var result = Models.MongoHelper.login_collection.UpdateOneAsync(filter, update);
 
                 return RedirectToAction("Index");
             }
@@ -76,18 +103,30 @@ namespace MVC_project.Controllers
         }
 
         // GET: Login/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
-            return View();
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.login_collection =
+                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+
+            var filter = Builders<Models.Login>.Filter.Eq("_id", id);
+            var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
+            return View(result);
         }
 
         // POST: Login/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(string id, FormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.login_collection =
+                    Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+
+                var filter = Builders<Models.Login>.Filter.Eq("_id", id);
+
+                var result = Models.MongoHelper.login_collection.DeleteOneAsync(filter);
 
                 return RedirectToAction("Index");
             }
@@ -103,7 +142,7 @@ namespace MVC_project.Controllers
             Models.MongoHelper.login_collection =
                 Models.MongoHelper.database.GetCollection<Models.Login>("Login");
 
-            var filter = Builders<Models.Login>.Filter.Ne("ID", "");
+            var filter = Builders<Models.Login>.Filter.Ne("_id", "");
             var result = Models.MongoHelper.login_collection.Find(filter).ToList();
 
             return View(result);
