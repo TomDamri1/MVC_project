@@ -1,0 +1,75 @@
+﻿@model IEnumerable<MVC_project.Models.Course>
+
+@{
+    ViewBag.Title = "CourseData";
+}
+
+<h2>CourseData</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Course_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lecturer_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoedA)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoedB)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Day)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.start)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.end)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Course_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Lecturer_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoedA)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoedB)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Day)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.start)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.end)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item._id }) |
+            @Html.ActionLink("Details", "Details", new { id = item._id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item._id })
+        </td>
+    </tr>
+}
+
+</table>

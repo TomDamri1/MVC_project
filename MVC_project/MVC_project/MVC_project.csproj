@@ -170,6 +170,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -178,6 +179,7 @@
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\MongoHelper.cs" />
     <Compile Include="Models\Schedule.cs" />
+    <Compile Include="Models\UserStatic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +222,15 @@
     <Content Include="Views\Login\Edit.cshtml" />
     <Content Include="Views\Login\Details.cshtml" />
     <Content Include="Views\Login\Delete.cshtml" />
+    <Content Include="Views\Login\LoginPressed.cshtml" />
+    <Content Include="Views\Login\StudentPage.cshtml" />
+    <Content Include="Views\Login\LecturerPage.cshtml" />
+    <Content Include="Views\Login\admin.cshtml" />
+    <Content Include="Views\Course\Create.cshtml" />
+    <Content Include="Views\Course\CourseData.cshtml" />
+    <Content Include="Views\Course\Edit.cshtml" />
+    <Content Include="Views\Course\Delete.cshtml" />
+    <Content Include="Views\Course\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,82 @@
+﻿@model MVC_project.Models.Course
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Course</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Course_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Course_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Lecturer_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lecturer_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoedA)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoedA)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoedB)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoedB)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Day)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Day)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.start)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.start)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.end)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.end)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new {id = Model.Course_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

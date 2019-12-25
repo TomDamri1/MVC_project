@@ -1,0 +1,13 @@
+﻿@model MVC_project.Models.Login
+
+@{
+    ViewBag.Title = "LecturerPage";
+}
+<div class="jumbotron">
+    <h2>@Session["FirstName"] @Session["LastName"]</h2>
+    <p>
+        Welcome @Session["Type"] @Session["FirstName"] @Session["LastName"] to SCE software department site!
+    </p>
+
+    <img src="https://ak6.picdn.net/shutterstock/videos/4642826/thumb/6.jpg" style="width:400px; border-radius:10px 10px 10px 10px ; margin-left:500px" />
+</div>

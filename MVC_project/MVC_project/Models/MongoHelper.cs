@@ -14,6 +14,7 @@ namespace MVC_project.Models
         public static string MongoDatabase = "MVC_project"; //the name in mongo
 
         public static IMongoCollection<Models.Login> login_collection { get; set; }
+        public static IMongoCollection<Models.Course> course_collection { get; set; }
 
         internal static void ConnectToMongoService()
         {

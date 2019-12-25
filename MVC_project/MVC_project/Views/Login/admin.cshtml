@@ -1,0 +1,16 @@
+﻿@model MVC_project.Models.Login
+
+@{
+    ViewBag.Title = "admin";
+}
+
+<div class="jumbotron">
+
+    <h2>@Session["FirstName"] @Session["LastName"]</h2>
+    <p>
+        Welcome @Session["Type"] @Session["FirstName"] @Session["LastName"] to SCE software department site!
+    </p>
+
+    <img src="https://veritusgroup.com/wp-content/uploads/2017/01/happyboss-2015-Aug23.jpg" style="width:400px; border-radius:10px 10px 10px 10px; margin-left:500px" />
+    
+</div>
