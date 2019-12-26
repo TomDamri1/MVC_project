@@ -35,6 +35,15 @@
         <th>
             @Html.DisplayNameFor(model => model.end)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.classroom)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoedA_classroom)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoedB_classroom)
+        </th>
         <th></th>
     </tr>
 
@@ -65,9 +74,18 @@
             @Html.DisplayFor(modelItem => item.end)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item._id }) |
-            @Html.ActionLink("Details", "Details", new { id = item._id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item._id })
+            @Html.DisplayFor(modelItem => item.classroom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoedA_classroom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoedB_classroom)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
         </td>
     </tr>
 }

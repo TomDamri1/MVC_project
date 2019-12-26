@@ -10,15 +10,15 @@ namespace MVC_project.Models
      */
     public class Schedule
     {
-        public int SUNDAY   = 0;
-        public int MONDAY   = 1;
-        public int TUESDAY  = 2;
-        public int WEDNESDAY= 3;
-        public int THURSDAY = 4;
-        public int FRIDAY   = 5;
-        public int SATURDAY = 6;
+        public static int SUNDAY   = 0;
+        public static int MONDAY   = 1;
+        public static int TUESDAY  = 2;
+        public static int WEDNESDAY = 3;
+        public static int THURSDAY = 4;
+        public static int FRIDAY   = 5;
+        public static int SATURDAY = 6;
 
-        private string[,] Week = new string[7, 12] { 
+        public string[,] Week = new string[7, 12] { 
             { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" },
             { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" },
             { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" },

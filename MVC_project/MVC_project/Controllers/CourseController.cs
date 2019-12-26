@@ -52,11 +52,13 @@ namespace MVC_project.Controllers
                     Lecturer_ID = collection["Lecturer_ID"],
                     Name = collection["Name"],
                     MoedA = collection["MoedA"],
+                    MoedA_classroom = collection["MoedA_classroom"],
                     MoedB = collection["MoedB"],
+                    MoedB_classroom = collection["MoedB_classroom"],
                     Day = collection["Day"],
                     start = collection["start"],
-                    end = collection["end"]
-
+                    end = collection["end"],
+                    classroom = collection["classroom"]
                 });
 
                 return RedirectToAction("Index");
@@ -94,10 +96,13 @@ namespace MVC_project.Controllers
                     .Set("Lecturer_ID", collection["Lecturer_ID"])
                     .Set("Name", collection["Name"])
                     .Set("MoedA", collection["MoedA"])
+                    .Set("MoedA_classroom", collection["MoedA_classroom"])
                     .Set("MoedB", collection["MoedB"])
+                    .Set("MoedB_classroom", collection["MoedB_classroom"])
                     .Set("Day", collection["Day"])
                     .Set("start", collection["start"])
-                    .Set("end", collection["end"]);
+                    .Set("end", collection["end"])
+                    .Set("classroom", collection["classroom"]);
                 var result = Models.MongoHelper.course_collection.UpdateOneAsync(filter, update);
 
                 return RedirectToAction("CourseData");

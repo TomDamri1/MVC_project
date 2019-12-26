@@ -4,10 +4,7 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create Course</h2>
-<p>
-    for course id use c_id
-</p>
+<h2>Create</h2>
 
 @using (Html.BeginForm()) 
 {
@@ -78,6 +75,30 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.end, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.end, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.classroom, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.classroom, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.classroom, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MoedA_classroom, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MoedA_classroom, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MoedA_classroom, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MoedB_classroom, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MoedB_classroom, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MoedB_classroom, "", new { @class = "text-danger" })
             </div>
         </div>
 

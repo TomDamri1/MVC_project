@@ -74,9 +74,33 @@
             @Html.DisplayFor(model => model.end)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.classroom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.classroom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoedA_classroom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoedA_classroom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoedB_classroom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoedB_classroom)
+        </dd>
+
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new {id = Model.Course_ID }) |
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

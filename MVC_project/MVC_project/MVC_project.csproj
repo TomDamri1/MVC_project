@@ -227,12 +227,12 @@
     <Content Include="Views\Login\StudentPage.cshtml" />
     <Content Include="Views\Login\LecturerPage.cshtml" />
     <Content Include="Views\Login\admin.cshtml" />
+    <Content Include="Views\Login\AddCourse.cshtml" />
+    <Content Include="Views\Course\Details.cshtml" />
     <Content Include="Views\Course\Create.cshtml" />
-    <Content Include="Views\Course\CourseData.cshtml" />
     <Content Include="Views\Course\Edit.cshtml" />
     <Content Include="Views\Course\Delete.cshtml" />
-    <Content Include="Views\Course\Details.cshtml" />
-    <Content Include="Views\Login\AddCourse.cshtml" />
+    <Content Include="Views\Course\CourseData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

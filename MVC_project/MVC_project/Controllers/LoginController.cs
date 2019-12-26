@@ -54,6 +54,7 @@ namespace MVC_project.Controllers
                     UserName = collection["UserName"],
                     Type = collection["Type"],
                     Password = collection["Password"],
+                    course_list = new List<string> (),
                 });
 
                 return RedirectToAction("Index");
@@ -124,6 +125,8 @@ namespace MVC_project.Controllers
             try
             {
                 var course = Request.Form["course_to_add"];
+                var day = collection["Day"];
+                var classroom = collection["classroom"];
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.login_collection =
                     Models.MongoHelper.database.GetCollection<Models.Login>("Login");
@@ -131,7 +134,7 @@ namespace MVC_project.Controllers
                 var courses = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault().course_list;
                 coding.connection checker = new coding.connection();
                 string check_result = checker.is_course_ok(id, course);
-                if (check_result.Equals("Done!"))
+                if (check_result.Equals("true"))
                 {
                     courses.Add(course);
                 }
