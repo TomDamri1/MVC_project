@@ -27,5 +27,8 @@ namespace MVC_project.Models
         public string ID { get; set; }
         [Required(ErrorMessage = "This Field is Requried")]
         public Object _id { get; set; }
+
+        [Required(ErrorMessage = "This Field is Requried")]
+        public List<string> course_list { get; set; }
     }
 }

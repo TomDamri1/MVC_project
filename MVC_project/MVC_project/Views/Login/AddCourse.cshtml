@@ -1,0 +1,36 @@
+﻿@model MVC_project.Models.Login
+
+@{
+    ViewBag.Title = "AddCourse";
+}
+
+<h2>AddCourse</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Login</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class = "control-label col-md-2">Course id : </label>
+            <div class="col-md-10">
+                <input id="course_to_add" name="course_to_add" type="text" class = "form-control" />
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

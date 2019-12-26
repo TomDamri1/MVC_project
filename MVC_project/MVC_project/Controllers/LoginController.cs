@@ -40,6 +40,8 @@ namespace MVC_project.Controllers
         {
             try
             {
+                
+
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.login_collection =
                     Models.MongoHelper.database.GetCollection<Models.Login>("Login");
@@ -51,7 +53,7 @@ namespace MVC_project.Controllers
                     ID = collection["ID"],
                     UserName = collection["UserName"],
                     Type = collection["Type"],
-                    Password = collection["Password"]
+                    Password = collection["Password"],
                 });
 
                 return RedirectToAction("Index");
@@ -71,6 +73,7 @@ namespace MVC_project.Controllers
 
             var filter = Builders<Models.Login>.Filter.Eq("_id", id);
             var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
+            TempData["Course_list"] = result.course_list;
             return View(result);
         }
 
@@ -83,7 +86,6 @@ namespace MVC_project.Controllers
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.login_collection =
                     Models.MongoHelper.database.GetCollection<Models.Login>("Login");
-
                 var filter = Builders<Models.Login>.Filter.Eq("_id", id);
                 var update = Builders<Models.Login>.Update
                     .Set("FirstName", collection["FirstName"])
@@ -102,6 +104,55 @@ namespace MVC_project.Controllers
                 return View("Error");
             }
         }
+
+        // GET: Login/Edit/5
+        public ActionResult AddCourse(string id)
+        {
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.login_collection =
+                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+
+            var filter = Builders<Models.Login>.Filter.Eq("_id", id);
+            var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
+            return View(result);
+        }
+
+        // POST: Login/Edit/5
+        [HttpPost]
+        public ActionResult AddCourse(string id,FormCollection collection)
+        {
+            try
+            {
+                var course = Request.Form["course_to_add"];
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.login_collection =
+                    Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+                var filter = Builders<Models.Login>.Filter.Eq("_id", id);
+                var courses = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault().course_list;
+                coding.connection checker = new coding.connection();
+                string check_result = checker.is_course_ok(id, course);
+                if (check_result.Equals("Done!"))
+                {
+                    courses.Add(course);
+                }
+                else
+                {
+                    ViewBag.Error = check_result;
+                    return View("Error");
+                }              
+                var update = Builders<Models.Login>.Update
+                    .Set("course_list",courses);
+                var result = Models.MongoHelper.login_collection.UpdateOneAsync(filter, update);
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View("Error");
+            }
+        }
+
+
 
         // GET: Login/Delete/5
         public ActionResult Delete(string id)
