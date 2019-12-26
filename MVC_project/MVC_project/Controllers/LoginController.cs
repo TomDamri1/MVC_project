@@ -125,8 +125,6 @@ namespace MVC_project.Controllers
             try
             {
                 var course = Request.Form["course_to_add"];
-                var day = collection["Day"];
-                var classroom = collection["classroom"];
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.login_collection =
                     Models.MongoHelper.database.GetCollection<Models.Login>("Login");

@@ -40,7 +40,15 @@ namespace MVC_project.Controllers
         {
             try
             {
-               
+                //assign lecturer automaticly ------------ TODO!
+
+                coding.connection checker = new coding.connection();
+                string check_result = checker.is_course_ok(collection);
+                if (!check_result.Equals("true"))
+                {
+                    ViewBag.Error = check_result;
+                    return View("Error");
+                 }
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.course_collection =
                     Models.MongoHelper.database.GetCollection<Models.Course>("Course");
@@ -65,7 +73,8 @@ namespace MVC_project.Controllers
             }
             catch
             {
-                return View();
+
+                return View("Error");
             }
         }
 

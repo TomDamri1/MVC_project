@@ -82,9 +82,9 @@ namespace MVC_project.coding
 
             //check if the lecturer got time for this course
             Schedule schedule = GetSchedule(Lecturer_ID);
-            int lstart = Course.getHourAsInt(course.start);
-            int lend = Course.getHourAsInt(course.end);
-            int day = Course.getDayAsInt(course.Day);
+            int lstart = start;
+            int lend = end;
+            int day = Course.getDayAsInt(Day);
             for (int i = lstart; i < lend; i++)
             {
                 if (!schedule.getHour(day, i).Equals("Empty"))
@@ -100,6 +100,15 @@ namespace MVC_project.coding
             }
 
             //check if the class is taken during the exam period
+            //if there is a course that moed a or b is in the same class in the same day
+            if (!is_class_ok_for_exam(MoedA, MoedA_classroom))
+            {
+                return "moedA classroom is taken";
+            }
+            if(!is_class_ok_for_exam(MoedB , MoedB_classroom))
+            {
+                return "moedB classroom is taken";
+            }
 
             //check if there is a lesson in the same class in those hours
 
@@ -166,6 +175,52 @@ namespace MVC_project.coding
 
             if ( Bday >  Aday )return true;
             return false;
+        }
+
+        public bool is_class_ok_for_exam(string exam_date , string classroom)// input : moedA / moedB
+        {
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.course_collection =
+                Models.MongoHelper.database.GetCollection<Models.Course>("Course");
+
+            var date_filter = Builders<Models.Course>.Filter.Eq("MoedA", exam_date);
+            var courses = Models.MongoHelper.course_collection.Find(date_filter).ToList();
+            foreach (Course course in courses)
+            {
+                if (course.MoedA_classroom.Equals(classroom))
+                {
+                    return false;
+                }
+            }
+
+            //and same to moed b
+            date_filter = Builders<Models.Course>.Filter.Eq("MoedB", exam_date);
+            courses = Models.MongoHelper.course_collection.Find(date_filter).ToList();
+            foreach (Course course in courses)
+            {
+                if (course.MoedB_classroom.Equals(classroom))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool is_class_ok(string day , string start , string end)
+        {
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.course_collection =
+                Models.MongoHelper.database.GetCollection<Models.Course>("Course");
+
+            var date_filter = Builders<Models.Course>.Filter.Eq("Day", day);
+            var courses = Models.MongoHelper.course_collection.Find(date_filter).ToList();
+            foreach (Object course in courses)
+            {
+                
+            }
+
+            return true;
         }
     }
 }
