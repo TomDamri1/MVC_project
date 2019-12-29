@@ -233,6 +233,7 @@
     <Content Include="Views\Course\Edit.cshtml" />
     <Content Include="Views\Course\Delete.cshtml" />
     <Content Include="Views\Course\CourseData.cshtml" />
+    <Content Include="Views\Login\Schedule.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

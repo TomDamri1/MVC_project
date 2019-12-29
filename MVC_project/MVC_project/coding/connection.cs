@@ -54,6 +54,8 @@ namespace MVC_project.coding
             return "true";
         }
 
+
+        //checks if its ok to add this course
         public string is_course_ok(FormCollection collection)
         {
             string _id = collection["Course_ID"];
@@ -103,15 +105,18 @@ namespace MVC_project.coding
             //if there is a course that moed a or b is in the same class in the same day
             if (!is_class_ok_for_exam(MoedA, MoedA_classroom))
             {
-                return "moedA classroom is taken";
+                return "moedA classroom is taken.";
             }
             if(!is_class_ok_for_exam(MoedB , MoedB_classroom))
             {
-                return "moedB classroom is taken";
+                return "moedB classroom is taken.";
             }
 
             //check if there is a lesson in the same class in those hours
-
+            if (!is_class_ok(_id, Day, start, end, classroom))
+            {
+                return "this class is taken in those hours.";
+            }
 
             return "true";
         }
@@ -207,17 +212,33 @@ namespace MVC_project.coding
             return true;
         }
 
-        public bool is_class_ok(string day , string start , string end)
+        public bool is_class_ok(string course_id,string day , int start , int end , string classroom)
         {
             Models.MongoHelper.ConnectToMongoService();
             Models.MongoHelper.course_collection =
                 Models.MongoHelper.database.GetCollection<Models.Course>("Course");
 
             var date_filter = Builders<Models.Course>.Filter.Eq("Day", day);
-            var courses = Models.MongoHelper.course_collection.Find(date_filter).ToList();
-            foreach (Object course in courses)
+            var id_filter = Builders<Models.Course>.Filter.Ne("_id", course_id);
+            var courses = Models.MongoHelper.course_collection.Find(date_filter&id_filter).ToList();
+            foreach (Course course in courses)
             {
-                
+                if (day.Equals(course.Day))
+                {
+                    int starthour = start;
+                    int endhour = end;
+                    int course_start = Course.getHourAsInt(course.start);
+                    int course_end = Course.getHourAsInt(course.end);
+                    for (int i=starthour; i < endhour; i++)
+                    {
+                        if (i == course_start)
+                            if (classroom.Equals(course.classroom))
+                                return false;
+                        if (i > course_start && i < course_end)
+                            if (classroom.Equals(course.classroom))
+                                return false;
+                    }
+                }
             }
 
             return true;

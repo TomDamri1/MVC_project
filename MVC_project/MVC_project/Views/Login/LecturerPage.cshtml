@@ -1,5 +1,6 @@
 ﻿@model MVC_project.Models.Login
 
+
 @{
     ViewBag.Title = "LecturerPage";
 }
@@ -8,6 +9,12 @@
     <p>
         Welcome @Session["Type"] @Session["FirstName"] @Session["LastName"] to SCE software department site!
     </p>
+
+    <table>
+        <tr>
+            <h4>@Html.ActionLink("View Schedule", "Schedule",new {id = Session["_id"] })</h4>
+        </tr>
+    </table>
 
     <img src="https://ak6.picdn.net/shutterstock/videos/4642826/thumb/6.jpg" style="width:400px; border-radius:10px 10px 10px 10px ; margin-left:500px" />
 </div>

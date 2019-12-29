@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -32,6 +33,10 @@ namespace MVC_project.Models
 
         public string MoedB_classroom { set; get; }
 
+        public List<string> student_list { get; set; }
+
+        public List<string> grade_list { get; set; }
+
         public static int getDayAsInt(string day)
         {
             switch (day.ToLower())
@@ -54,7 +59,7 @@ namespace MVC_project.Models
                     return -1;
             }
         }
-
+        
         public static int getHourAsInt(string hour)
         {
             int result =-1;
@@ -63,6 +68,62 @@ namespace MVC_project.Models
                 return -1;
             }
             return result;
+        }
+
+        public static string getCourseIdByName(string name)
+        {
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.course_collection =
+                Models.MongoHelper.database.GetCollection<Models.Course>("Course");
+
+            var filter1 = Builders<Models.Course>.Filter.Eq("Name", name);
+            var course = Models.MongoHelper.course_collection.Find(filter1).FirstOrDefault();
+
+            return course._id.ToString();
+        }
+
+        public static string addCourseToID(string course_id , string user_id)
+        {
+            var course = course_id;
+            string id = user_id;
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.login_collection =
+                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+            var filter = Builders<Models.Login>.Filter.Eq("_id", id);
+            var user = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
+            var courses = user.course_list;
+            coding.connection checker = new coding.connection();
+            string check_result = checker.is_course_ok(id, course);
+            if (check_result.Equals("true"))
+            {
+                courses.Add(course);
+            }
+            else
+            {
+                return check_result;
+            }
+            var update = Builders<Models.Login>.Update
+                .Set("course_list", courses);
+            var result = Models.MongoHelper.login_collection.UpdateOneAsync(filter, update);
+            if (user.Type.ToLower().Equals("student")) {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.course_collection =
+                    Models.MongoHelper.database.GetCollection<Models.Course>("Course");
+                
+                var course_filter = Builders<Models.Course>.Filter.Eq("_id", course_id);
+                var this_course = Models.MongoHelper.course_collection.Find(course_filter).FirstOrDefault();
+                var student_list = this_course.student_list.ToList();
+                student_list.Add(user_id);
+                var grade_list = this_course.grade_list.ToList();
+                grade_list.Add("none");
+                var update_course = Builders<Models.Course>.Update
+                        .Set("student_list", student_list)
+                        .Set("grade_list", grade_list);
+
+                var result_course = Models.MongoHelper.course_collection.UpdateOneAsync(course_filter, update_course);
+            }
+
+            return check_result;
         }
 
     }

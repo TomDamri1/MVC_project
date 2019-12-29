@@ -25,6 +25,14 @@ namespace MVC_project.Controllers
 
             var filter = Builders<Models.Course>.Filter.Eq("_id", id);
             var result = Models.MongoHelper.course_collection.Find(filter).FirstOrDefault();
+            coding.connection chekcer = new coding.connection();
+            string day = DateTime.Now.Day.ToString();
+            string month = DateTime.Now.Month.ToString();
+            string year = DateTime.Now.Year.ToString();
+            string date = day + '/' + month + '/' + year;
+            ViewBag.MoedA_Date_passed = chekcer.MoedAB_time_check(date, result.MoedA);
+            
+            
             return View(result);
         }
 
@@ -66,8 +74,16 @@ namespace MVC_project.Controllers
                     Day = collection["Day"],
                     start = collection["start"],
                     end = collection["end"],
-                    classroom = collection["classroom"]
+                    classroom = collection["classroom"],
+                    student_list = new List<string>(),
+                    grade_list = new List<string>(),
                 });
+                check_result = Course.addCourseToID(collection["Course_ID"], collection["Lecturer_ID"]);
+                if (!check_result.Equals("true"))
+                {
+                    ViewBag.Error = check_result;
+                    return View("Error");
+                }
 
                 return RedirectToAction("Index");
             }

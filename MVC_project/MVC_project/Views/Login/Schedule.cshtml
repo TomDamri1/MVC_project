@@ -1,0 +1,55 @@
+﻿@*model IEnumerable<MVC_project.Models.Schedule>*@
+@using MVC_project.coding;
+@using MVC_project.Models;
+
+@{
+    ViewBag.Title = "Schedule";
+    int hour = 8;
+    connection connection = new connection();
+    Schedule schedule = connection.GetSchedule(Session["_id"].ToString());
+
+
+
+}
+<div class="jumbotron">
+    <h2>Schedule</h2>
+
+    <table class="table" style="z-index:2">
+        <tr>
+            <th>HOUR</th>
+            <th>SUNDAY</th>
+            <th>MONDAY</th>
+            <th>TUESDAY</th>
+            <th>WEDNESDAY</th>
+            <th>THURSDAY</th>
+            <th>FRIDAY</th>
+            <th>SATURDAY</th>
+        </tr>
+        @for (int time = 0; time < 13; time++)
+        {
+            <tr>
+                <td>
+                    @Schedule.intToHour(time + hour)
+                </td>
+                @for (int day = 0; day < 7; day++)
+                {
+                    <td>
+                        @if (!schedule.Week[day, time].Equals("Empty"))
+                        {
+                            @Html.ActionLink(schedule.Week[day, time], "Details", "Course", new { id = Course.getCourseIdByName(schedule.Week[day, time]) }, null)
+                        }
+                    </td>
+                }
+            </tr>
+        }
+
+
+
+    </table>
+    
+</div>
+<img src="https://image.freepik.com/free-photo/smiling-teacher-standing-thumbs-up-front-blackboard_13339-129404.jpg" style="
+    width:400px; border-radius:10px 10px 10px 10px ;
+    margin-left:1100px;
+    margin-top:-1240px;
+    z-index: 1" />

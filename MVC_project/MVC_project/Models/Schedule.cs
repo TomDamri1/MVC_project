@@ -18,7 +18,7 @@ namespace MVC_project.Models
         public static int FRIDAY   = 5;
         public static int SATURDAY = 6;
 
-        public string[,] Week = new string[7, 12] { 
+        public string[,] Week2 = new string[7, 12] { 
             { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" },
             { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" },
             { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" },
@@ -26,6 +26,16 @@ namespace MVC_project.Models
             { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" },
             { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" },
             { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" }
+        };
+
+        public string[,] Week = new string[7, 13] {
+            { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" , "Empty"},
+            { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" , "Empty"},
+            { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" , "Empty"},
+            { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" , "Empty"},
+            { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" , "Empty"},
+            { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" , "Empty"},
+            { "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty" , "Empty"}
         };
 
         public void AddItemToSchedule(int day, int hour, string item)
@@ -39,6 +49,20 @@ namespace MVC_project.Models
         public string getHour(int day, int hour)
         {
             return this.Week[day, hour - 8];
+        }
+
+        public static string intToHour(int hour)
+        {
+            string result = ":00";
+            if (hour < 10)
+            {
+                result = "0" + hour.ToString() + result;
+            }
+            else
+            {
+                result = hour.ToString() + result;
+            }
+            return result;
         }
     }
 

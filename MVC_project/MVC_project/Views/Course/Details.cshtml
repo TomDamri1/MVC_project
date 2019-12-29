@@ -1,7 +1,9 @@
 ﻿@model MVC_project.Models.Course
-
+@using MVC_project.Models
 @{
     ViewBag.Title = "Details";
+    string no_grd_message = "no grade yet";
+
 }
 
 <h2>Details</h2>
@@ -100,7 +102,78 @@
 
     </dl>
 </div>
+
+
+<table class="table">
+    @if (Session["Type"].Equals("student"))
+    {
+        <tr>
+            <th>
+                Student ID
+            </th>
+            <th>
+                Grade
+            </th>
+
+        </tr>
+
+        for (int i = 0; i < Model.student_list.Count(); i++)
+        {
+            <tr>
+                <td>
+                    @Model.student_list[i]
+                </td>
+                <td>
+                    @if (ViewBag.MoedA_Date_passed)
+                    {
+                        @Model.grade_list[i]
+                    }
+                    else
+                    {
+                        @no_grd_message
+                    }
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <th>
+                Student ID
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Grade
+            </th>
+
+        </tr>
+
+        for (int i = 0; i < Model.student_list.Count(); i++)
+        {
+            <tr>
+                <td>
+                    @Model.student_list[i]
+                </td>
+                <td>
+                    @Login.getFullName_by_ID(Model.student_list[i].ToString())
+                </td>
+                <td>
+                    @if (ViewBag.MoedA_Date_passed)
+                    {
+                        @Model.grade_list[i]
+                    }
+                    else
+                    {
+                        @no_grd_message
+                    }
+                </td>
+            </tr>
+        }
+    }
+</table>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
+    <a href="javascript:void(0);" onclick="history.go(-1);">Back</a>
 </p>

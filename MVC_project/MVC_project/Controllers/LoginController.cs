@@ -125,25 +125,7 @@ namespace MVC_project.Controllers
             try
             {
                 var course = Request.Form["course_to_add"];
-                Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.login_collection =
-                    Models.MongoHelper.database.GetCollection<Models.Login>("Login");
-                var filter = Builders<Models.Login>.Filter.Eq("_id", id);
-                var courses = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault().course_list;
-                coding.connection checker = new coding.connection();
-                string check_result = checker.is_course_ok(id, course);
-                if (check_result.Equals("true"))
-                {
-                    courses.Add(course);
-                }
-                else
-                {
-                    ViewBag.Error = check_result;
-                    return View("Error");
-                }              
-                var update = Builders<Models.Login>.Update
-                    .Set("course_list",courses);
-                var result = Models.MongoHelper.login_collection.UpdateOneAsync(filter, update);
+                Course.addCourseToID(course.ToString(), id);
 
                 return RedirectToAction("Index");
             }
@@ -203,40 +185,49 @@ namespace MVC_project.Controllers
 
         public ActionResult LoginPressed()
         {
-            Session["UserName"] = Request.Form["UserName"];
-            Session["Password"] = Request.Form["Password"];
-
-            Models.MongoHelper.ConnectToMongoService();
-            Models.MongoHelper.login_collection =
-                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
-
-            var username_filter = Builders<Models.Login>.Filter.Eq("UserName", Session["UserName"]);
-            var password_filter = Builders<Models.Login>.Filter.Eq("Password", Session["Password"]);
-            var filter = username_filter & password_filter;
-
-            var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
-
             try
             {
-                Session["Type"] = result.Type;
-                Session["FirstName"] = result.FirstName;
-                Session["LastName"] = result.LastName;
+                Session["UserName"] = Request.Form["UserName"];
+                Session["Password"] = Request.Form["Password"];
 
-                if(Session["Type"].Equals("student"))
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.login_collection =
+                    Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+
+                var username_filter = Builders<Models.Login>.Filter.Eq("UserName", Session["UserName"]);
+                var password_filter = Builders<Models.Login>.Filter.Eq("Password", Session["Password"]);
+                var filter = username_filter & password_filter;
+
+                var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
+
+                try
                 {
-                    return View("StudentPage");
+                    Session["Type"] = result.Type;
+                    Session["FirstName"] = result.FirstName;
+                    Session["LastName"] = result.LastName;
+                    Session["_id"] = result._id;
+
+                    if (Session["Type"].Equals("student"))
+                    {
+                        return View("StudentPage");
+                    }
+                    else if (Session["Type"].Equals("lecturer"))
+                    {
+                        return View("LecturerPage");
+                    }
+                    else if (Session["Type"].Equals("admin"))
+                    {
+                        return View("StudentPage");
+                    }
                 }
-                else if (Session["Type"].Equals("lecturer"))
+                catch (Exception)
                 {
-                    return View("LecturerPage");
-                }
-                else if (Session["Type"].Equals("admin"))
-                {
-                    return View("StudentPage");
+                    return View("Error");
                 }
             }
             catch (Exception)
             {
+                ViewBag.Error = "the connection to the database has broken. please try again.";
                 return View("Error");
             }
 
@@ -258,6 +249,12 @@ namespace MVC_project.Controllers
             return View();
         }
 
-
+        public ActionResult Schedule(string id)
+        {
+            coding.connection connection = new coding.connection();
+            Models.Schedule schedule = connection.GetSchedule(id);
+            Session["Schedule"] = schedule;
+            return View();
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Driver;
 
 namespace MVC_project.Models
 {
@@ -30,5 +31,17 @@ namespace MVC_project.Models
 
         [Required(ErrorMessage = "This Field is Requried")]
         public List<string> course_list { get; set; }
+
+        public static string getFullName_by_ID(string id)
+        {
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.login_collection =
+                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+
+            var filter = Builders<Models.Login>.Filter.Eq("_id", id);
+            var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
+
+            return result.FirstName.ToString() + " " + result.LastName.ToString();
+        }
     }
 }
