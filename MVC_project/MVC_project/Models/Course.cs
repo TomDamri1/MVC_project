@@ -37,6 +37,8 @@ namespace MVC_project.Models
 
         public List<string> grade_list { get; set; }
 
+        public List<string> grade_listB { get; set; }
+
         public static int getDayAsInt(string day)
         {
             switch (day.ToLower())
@@ -116,9 +118,12 @@ namespace MVC_project.Models
                 student_list.Add(user_id);
                 var grade_list = this_course.grade_list.ToList();
                 grade_list.Add("none");
+                var grade_listB = this_course.grade_listB.ToList();
+                grade_listB.Add("none");
                 var update_course = Builders<Models.Course>.Update
                         .Set("student_list", student_list)
-                        .Set("grade_list", grade_list);
+                        .Set("grade_list", grade_list)
+                        .Set("grade_listB",grade_list);
 
                 var result_course = Models.MongoHelper.course_collection.UpdateOneAsync(course_filter, update_course);
             }

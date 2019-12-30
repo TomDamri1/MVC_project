@@ -1,15 +1,35 @@
 ﻿@model MVC_project.Models.Course
 @using MVC_project.Models
+@using MVC_project.coding
 @{
     ViewBag.Title = "Details";
     string no_grd_message = "no grade yet";
 
+    bool is_it_ok_to_show_MoedB(int student_place)
+    {
+        connection chekcer = new connection();
+        string day = DateTime.Now.Day.ToString();
+        string month = DateTime.Now.Month.ToString();
+        string year = DateTime.Now.Year.ToString();
+        string date = day + '/' + month + '/' + year;
+        bool MoedB_Date_passed = chekcer.MoedAB_time_check(Model.MoedB, date);
+        if (!MoedB_Date_passed)
+        {
+            return false;
+        }
+        if (Model.grade_listB[student_place].ToString().Equals("none"))
+        {
+            return false;
+        }
+        return true;
+    }
+
 }
 
-<h2>Details</h2>
+<h2>@Model.Name.ToUpper()</h2>
 
 <div>
-    <h4>Course</h4>
+    <h4>Details</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -105,7 +125,7 @@
 
 
 <table class="table">
-    @if (Session["Type"].Equals("student"))
+    @if (Session["Type"].ToString().ToLower().Equals("student"))
     {
         <tr>
             <th>
@@ -124,7 +144,11 @@
                     @Model.student_list[i]
                 </td>
                 <td>
-                    @if (ViewBag.MoedA_Date_passed)
+                    @if (is_it_ok_to_show_MoedB(i))
+                    {
+                        @Model.grade_listB[i]
+                    }
+                    else if (ViewBag.MoedA_Date_passed)
                     {
                         @Model.grade_list[i]
                     }
@@ -146,31 +170,53 @@
                 Name
             </th>
             <th>
-                Grade
+                Moed A grade
+            </th>
+            <th>
+                Moed B grade
+            </th>
+            <th>
+
             </th>
 
         </tr>
 
         for (int i = 0; i < Model.student_list.Count(); i++)
         {
-            <tr>
-                <td>
-                    @Model.student_list[i]
-                </td>
-                <td>
-                    @Login.getFullName_by_ID(Model.student_list[i].ToString())
-                </td>
-                <td>
-                    @if (ViewBag.MoedA_Date_passed)
-                    {
-                        @Model.grade_list[i]
-                    }
-                    else
-                    {
-                        @no_grd_message
-                    }
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Model.student_list[i]
+            </td>
+            <td>
+                @Login.getFullName_by_ID(Model.student_list[i].ToString())
+            </td>
+            <td>
+                @if (ViewBag.MoedA_Date_passed)
+                {
+                    @Model.grade_list[i]
+                }
+                else
+                {
+                    @no_grd_message
+                }
+            </td>
+            <td>
+                @if (is_it_ok_to_show_MoedB(i))
+                {
+                    @Model.grade_listB[i]
+                }
+                else
+                {
+                    @no_grd_message
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Change grade", "ChangeGrade", new {
+                    student_id = Model.student_list[i],
+                    course_id = Model._id.ToString()
+                }) 
+            </td>
+        </tr>
         }
     }
 </table>

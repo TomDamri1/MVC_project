@@ -205,7 +205,7 @@ namespace MVC_project.Controllers
                     Session["Type"] = result.Type;
                     Session["FirstName"] = result.FirstName;
                     Session["LastName"] = result.LastName;
-                    Session["_id"] = result._id;
+                    Session["_id"] = result._id.ToString();
 
                     if (Session["Type"].Equals("student"))
                     {
@@ -217,7 +217,7 @@ namespace MVC_project.Controllers
                     }
                     else if (Session["Type"].Equals("admin"))
                     {
-                        return View("StudentPage");
+                        return View("admin");
                     }
                 }
                 catch (Exception)
