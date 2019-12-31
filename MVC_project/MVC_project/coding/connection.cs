@@ -10,8 +10,9 @@ namespace MVC_project.coding
 {
     public class connection
     {
-        //CHEKS IF ITS OK TO THE USER TO SIGN TO THIS COURSE
-        public string is_course_ok(string user_id, string course_id)
+        //CHEKS IF ITS OK TO THE USER TO SIGN TO THIS COURSE 
+        // use name attribute only after editing otherwise => put null instead
+        public string is_course_ok(string user_id, string course_id , string name)
         {
             //check if the course exist in course DB:
             Models.MongoHelper.ConnectToMongoService();
@@ -26,24 +27,37 @@ namespace MVC_project.coding
             }
 
             //check if the course exist for this user:
-            Models.MongoHelper.ConnectToMongoService();
-            Models.MongoHelper.login_collection =
-                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
-            var filter2 = Builders<Models.Login>.Filter.Eq("_id", user_id);
-            var courses = Models.MongoHelper.login_collection.Find(filter2).FirstOrDefault().course_list;
-            if (courses.Contains(course_id))
+            if (name == null)
             {
-                return "this user is already assigned to the course.";
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.login_collection =
+                    Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+                var filter2 = Builders<Models.Login>.Filter.Eq("_id", user_id);
+                var courses = Models.MongoHelper.login_collection.Find(filter2).FirstOrDefault().course_list;
+                if (courses.Contains(course_id))
+                {
+                    return "this user is already assigned to the course.";
+                }
             }
+            
 
             //check schedule:
             Schedule schedule = GetSchedule(user_id);
             int start = Course.getHourAsInt(course.start);
             int end = Course.getHourAsInt(course.end);
             int day = Course.getDayAsInt(course.Day);
+            bool condition = false;
             for (int i = start; i < end; i++)
             {
-                if (!schedule.getHour(day, i).Equals("Empty"))
+                if (name == null)
+                {
+                     condition = !schedule.getHour(day, i).Equals("Empty");
+                }
+                else
+                {
+                     condition = !schedule.getHour(day, i).Equals("Empty") && !schedule.getHour(day, i).Equals(name);
+                }
+                if (condition)
                 {
                     return "there is another course in this time.";
                 }
@@ -89,11 +103,13 @@ namespace MVC_project.coding
             int day = Course.getDayAsInt(Day);
             for (int i = lstart; i < lend; i++)
             {
-                if (!schedule.getHour(day, i).Equals("Empty"))
+                if (!schedule.getHour(day, i).Equals("Empty") && !schedule.getHour(day, i).Equals(name))
                 {
                     return "this lecturer is taken in those hours.";
                 }
             }
+
+
 
             //check if moedA is befor moedB
             if (!MoedAB_time_check(MoedA, MoedB))
@@ -121,6 +137,64 @@ namespace MVC_project.coding
             return "true";
         }
 
+        public string is_course_ok(FormCollection collection , string edit)
+        {
+            string _id = collection["Course_ID"];
+            string name = collection["Name"];
+            string Lecturer_ID = collection["Lecturer_ID"];
+            string MoedA = collection["MoedA"];
+            string MoedA_classroom = collection["MoedA_classroom"];
+            string MoedB = collection["MoedB"];
+            string MoedB_classroom = collection["MoedB_classroom"];
+            string Day = collection["Day"];
+            int start = Course.getHourAsInt(collection["start"]);
+            int end = Course.getHourAsInt(collection["end"]);
+            string classroom = collection["classroom"];
+
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.course_collection =
+                Models.MongoHelper.database.GetCollection<Models.Course>("Course");
+
+            //check if the lecturer got time for this course
+            Schedule schedule = GetSchedule(Lecturer_ID);
+            int lstart = start;
+            int lend = end;
+            int day = Course.getDayAsInt(Day);
+            for (int i = lstart; i < lend; i++)
+            {
+                if (!schedule.getHour(day, i).Equals("Empty") && !schedule.getHour(day, i).Equals(name))
+                {
+                    return "this lecturer is taken in those hours.";
+                }
+            }
+
+
+
+            //check if moedA is befor moedB
+            if (!MoedAB_time_check(MoedA, MoedB))
+            {
+                return "MoedA is before MoedB";
+            }
+
+            //check if the class is taken during the exam period
+            //if there is a course that moed a or b is in the same class in the same day
+            if (!is_class_ok_for_exam(MoedA, MoedA_classroom,_id))
+            {
+                return "moedA classroom is taken.";
+            }
+            if (!is_class_ok_for_exam(MoedB, MoedB_classroom,_id))
+            {
+                return "moedB classroom is taken.";
+            }
+
+            //check if there is a lesson in the same class in those hours
+            if (!is_class_ok(_id, Day, start, end, classroom))
+            {
+                return "this class is taken in those hours.";
+            }
+
+            return "true";
+        }
         public Schedule GetSchedule(string user_id)
         {
             Schedule schedule = new Schedule();
@@ -212,6 +286,37 @@ namespace MVC_project.coding
             return true;
         }
 
+        public bool is_class_ok_for_exam(string exam_date, string classroom , string course_id)// input : moedA / moedB
+        {
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.course_collection =
+                Models.MongoHelper.database.GetCollection<Models.Course>("Course");
+
+            var course_filter = Builders<Models.Course>.Filter.Ne("_id", course_id);
+            var date_filter = Builders<Models.Course>.Filter.Eq("MoedA", exam_date);
+            var courses = Models.MongoHelper.course_collection.Find(date_filter& course_filter).ToList();
+            foreach (Course course in courses)
+            {
+                if (course.MoedA_classroom.Equals(classroom))
+                {
+                    return false;
+                }
+            }
+
+            //and same to moed b
+            date_filter = Builders<Models.Course>.Filter.Eq("MoedB", exam_date);
+            courses = Models.MongoHelper.course_collection.Find(date_filter& course_filter).ToList();
+            foreach (Course course in courses)
+            {
+                if (course.MoedB_classroom.Equals(classroom))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public bool is_class_ok(string course_id,string day , int start , int end , string classroom)
         {
             Models.MongoHelper.ConnectToMongoService();
@@ -242,6 +347,45 @@ namespace MVC_project.coding
             }
 
             return true;
+        }
+
+        public string is_course_ok_after_edit(FormCollection collection)
+        {
+            string _id = collection["Course_ID"];
+            string name = collection["Name"];
+            string Lecturer_ID = collection["Lecturer_ID"];
+            string MoedA = collection["MoedA"];
+            string MoedA_classroom = collection["MoedA_classroom"];
+            string MoedB = collection["MoedB"];
+            string MoedB_classroom = collection["MoedB_classroom"];
+            string Day = collection["Day"];
+            int start = Course.getHourAsInt(collection["start"]);
+            int end = Course.getHourAsInt(collection["end"]);
+            string classroom = collection["classroom"];
+            string check_result = is_course_ok(collection,null);
+            if (!check_result.Equals("true"))
+            {
+                return check_result;
+            }
+
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.course_collection =
+                Models.MongoHelper.database.GetCollection<Models.Course>("Course");
+
+            //check if the name is ok
+            var filter = Builders<Models.Course>.Filter.Ne("_id",_id); 
+            var course = Models.MongoHelper.course_collection.Find(filter).FirstOrDefault();
+            List<string> students = course.student_list.ToList();
+            foreach (string student in students)
+            {
+                if(!is_course_ok(student, _id, name).Equals("true"))
+                {
+                    return "student id: " + student + " got another lecture in that time: "+ is_course_ok(student, _id, name);
+                }
+            }
+
+
+            return "true";
         }
     }
 }

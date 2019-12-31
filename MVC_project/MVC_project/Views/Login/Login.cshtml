@@ -2,10 +2,26 @@
 @using MVC_project.Models;
 
 @{
-    
-
+    void logout()
+    {
+        Session["UserName"] = null;
+        Session["Password"] = null;
+        Session["Type"] = null;
+        Session["FirstName"] = null;
+        Session["LastName"] = null;
+        Session["_id"] = null;
+    }
 }
 <div class="jumbotron">
+    @try
+    {
+        logout();
+    }
+    catch
+    {
+
+    }
+
     <h1>SCE - Software Department</h1>
     <p>
         welcome to SCE software department site!<br />
@@ -35,7 +51,7 @@
 
 
 
-    <img src="https://ak0.picdn.net/shutterstock/videos/4507700/thumb/6.jpg" style="border-radius: 50% 50% 50% 50%; margin-left:275px; margin-top:-200px; width:75%"/>
+    <img src="https://ak0.picdn.net/shutterstock/videos/4507700/thumb/6.jpg" style="border-radius: 50% 50% 50% 50%; margin-left:275px; margin-top:-200px; width:75%" />
 
 
 </div>

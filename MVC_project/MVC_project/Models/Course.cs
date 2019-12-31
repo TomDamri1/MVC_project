@@ -95,7 +95,7 @@ namespace MVC_project.Models
             var user = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
             var courses = user.course_list;
             coding.connection checker = new coding.connection();
-            string check_result = checker.is_course_ok(id, course);
+            string check_result = checker.is_course_ok(id, course,null);
             if (check_result.Equals("true"))
             {
                 courses.Add(course);

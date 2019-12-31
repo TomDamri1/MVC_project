@@ -222,6 +222,7 @@ namespace MVC_project.Controllers
                 }
                 catch (Exception)
                 {
+                    ViewBag.Error = Session["Type"].ToString();
                     return View("Error");
                 }
             }

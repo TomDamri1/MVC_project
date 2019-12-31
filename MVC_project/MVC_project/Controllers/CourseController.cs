@@ -56,7 +56,7 @@ namespace MVC_project.Controllers
                 {
                     ViewBag.Error = check_result;
                     return View("Error");
-                 }
+                }
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.course_collection =
                     Models.MongoHelper.database.GetCollection<Models.Course>("Course");
@@ -116,22 +116,35 @@ namespace MVC_project.Controllers
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.course_collection =
                     Models.MongoHelper.database.GetCollection<Models.Course>("Course");
+                coding.connection connection = new coding.connection();
+                string check_result = connection.is_course_ok_after_edit(collection);
+                if (check_result.Equals("true"))
+                {
+                    var filter = Builders<Models.Course>.Filter.Eq("_id", id);
+                    var update = Builders<Models.Course>.Update
+                        .Set("Lecturer_ID", collection["Lecturer_ID"])
+                        .Set("Name", collection["Name"])
+                        .Set("MoedA", collection["MoedA"])
+                        .Set("MoedA_classroom", collection["MoedA_classroom"])
+                        .Set("MoedB", collection["MoedB"])
+                        .Set("MoedB_classroom", collection["MoedB_classroom"])
+                        .Set("Day", collection["Day"])
+                        .Set("start", collection["start"])
+                        .Set("end", collection["end"])
+                        .Set("classroom", collection["classroom"]);
 
-                var filter = Builders<Models.Course>.Filter.Eq("_id", id);
-                var update = Builders<Models.Course>.Update
-                    .Set("Lecturer_ID", collection["Lecturer_ID"])
-                    .Set("Name", collection["Name"])
-                    .Set("MoedA", collection["MoedA"])
-                    .Set("MoedA_classroom", collection["MoedA_classroom"])
-                    .Set("MoedB", collection["MoedB"])
-                    .Set("MoedB_classroom", collection["MoedB_classroom"])
-                    .Set("Day", collection["Day"])
-                    .Set("start", collection["start"])
-                    .Set("end", collection["end"])
-                    .Set("classroom", collection["classroom"]);
-                var result = Models.MongoHelper.course_collection.UpdateOneAsync(filter, update);
 
-                return RedirectToAction("CourseData");
+                    var result = Models.MongoHelper.course_collection.UpdateOneAsync(filter, update);
+
+                    return RedirectToAction("CourseData");
+                }
+                else
+                {
+                    ViewBag.Error = check_result;
+                    return View("Error");
+                }
+
+                
             }
             catch (Exception)
             {

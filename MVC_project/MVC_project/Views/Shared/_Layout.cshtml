@@ -16,11 +16,34 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("SCE", "", "", new { area = "" }, new { @class = "navbar-brand" })
+                @try
+                {
+                    if (Session["Type"].ToString().ToLower().Equals("student"))
+                    {
+                        @Html.ActionLink("SCE", "StudentPage", "Login", new { area = "" }, new { @class = "navbar-brand" })
+                    }
+                    else if (Session["Type"].ToString().ToLower().Equals("lecturer"))
+                    {
+                        @Html.ActionLink("SCE", "LecturerPage", "Login", new { area = "" }, new { @class = "navbar-brand" })
+                    }
+                    else if (Session["Type"].ToString().ToLower().Equals("admin"))
+                    {
+                        @Html.ActionLink("SCE", "admin", "Login", new { area = "" }, new { @class = "navbar-brand" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("SCE", "", "", new { area = "" }, new { @class = "navbar-brand" })
+                    }
+                }
+                catch
+                {
+                    @Html.ActionLink("SCE", "", "", new { area = "" }, new { @class = "navbar-brand" })
+                }
+
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Logout", "", "")</li>
                 </ul>
             </div>
         </div>

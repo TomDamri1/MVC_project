@@ -7,7 +7,18 @@
 <h2>CourseData</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @try
+    {
+        if (Session["Type"].ToString().ToLower().Equals("admin"))
+        {
+            @Html.ActionLink("Create New", "Create")
+        }
+    }
+    catch
+    {
+
+    }
+
 </p>
 <table class="table">
     <tr>
@@ -82,11 +93,22 @@
         <td>
             @Html.DisplayFor(modelItem => item.MoedB_classroom)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item._id }) |
-            @Html.ActionLink("Details", "Details", new { id=item._id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item._id })
-        </td>
+        @try
+        {
+            if (Session["Type"].ToString().ToLower().Equals("admin"))
+            {
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item._id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item._id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item._id })
+                </td>
+            }
+        }
+        catch
+        {
+
+        }
+
     </tr>
 }
 

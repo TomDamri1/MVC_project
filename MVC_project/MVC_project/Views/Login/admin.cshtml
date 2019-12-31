@@ -9,8 +9,22 @@
     <h2>@Session["FirstName"] @Session["LastName"]</h2>
     <p>
         Welcome @Session["Type"] @Session["FirstName"] @Session["LastName"] to SCE software department site!
+        <br /><br /><br /><br />
     </p>
 
-    <img src="https://veritusgroup.com/wp-content/uploads/2017/01/happyboss-2015-Aug23.jpg" style="width:400px; border-radius:10px 10px 10px 10px; margin-left:500px" />
-    
+    <table>
+        <tr>
+            <h2>@Html.ActionLink("View Courses", "CourseData", "Course", new { id = Session["_id"] }, null)</h2>
+            <p> Courses | Create | Edit | Delete | Get Details</p>
+        </tr>
+        <tr>
+            <h2>
+                @Html.ActionLink("View Users", "LoginData", new { id = Session["_id"] })
+            </h2>
+            <p> Users | Create | Edit | Get Details | Delete | Add Course to Student</p>
+        </tr>
+    </table>
+
+    <img src="https://veritusgroup.com/wp-content/uploads/2017/01/happyboss-2015-Aug23.jpg" style="width:400px; border-radius:10px 10px 10px 10px; margin-left:500px; margin-top:-250px" />
+
 </div>
