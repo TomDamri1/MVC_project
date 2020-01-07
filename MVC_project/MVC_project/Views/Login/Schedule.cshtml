@@ -3,12 +3,11 @@
 @using MVC_project.Models;
 
 @{
+
     ViewBag.Title = "Schedule";
     int hour = 8;
     connection connection = new connection();
     Schedule schedule = connection.GetSchedule(Session["_id"].ToString());
-
-
 
 }
 <div class="jumbotron">
@@ -25,6 +24,7 @@
             <th>FRIDAY</th>
             <th>SATURDAY</th>
         </tr>
+
         @for (int time = 0; time < 13; time++)
         {
             <tr>
@@ -42,7 +42,6 @@
                 }
             </tr>
         }
-
 
 
     </table>
