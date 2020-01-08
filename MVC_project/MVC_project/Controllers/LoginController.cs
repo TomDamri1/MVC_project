@@ -261,6 +261,11 @@ namespace MVC_project.Controllers
                     return View("Error");
                 }
             }
+            catch (System.NullReferenceException)
+            {
+                ViewBag.Error = "username or password incorrect.";
+                return View("Error");
+            }
             catch (Exception)
             {
                 ViewBag.Error = "the connection to the database has broken. please try again.";
