@@ -46,7 +46,7 @@ namespace MVC_project.coding
             int start = Course.getHourAsInt(course.start);
             int end = Course.getHourAsInt(course.end);
             int day = Course.getDayAsInt(course.Day);
-            bool condition = false;
+            bool condition = true;
             for (int i = start; i < end; i++)
             {
                 if (name == null)
@@ -55,7 +55,15 @@ namespace MVC_project.coding
                 }
                 else
                 {
-                     condition = !schedule.getHour(day, i).Equals("Empty") && !schedule.getHour(day, i).Equals(name);
+                    if(!schedule.getHour(day, i).Equals("Empty"))
+                    {
+                        condition = false;
+                    }
+                    else if(!schedule.getHour(day, i).Equals(name))
+                    {
+                        condition = false;
+                    }
+                     //condition = !schedule.getHour(day, i).Equals("Empty") || !schedule.getHour(day, i).Equals(name);
                 }
                 if (condition)
                 {
@@ -378,13 +386,52 @@ namespace MVC_project.coding
             List<string> students = course.student_list.ToList();
             foreach (string student in students)
             {
-                if(!is_course_ok(student, _id, name).Equals("true"))
+                if(!is_course_ok(collection, student, name).Equals("true"))
                 {
-                    return "student id: " + student + " got another lecture in that time: "+ is_course_ok(student, _id, name);
+                    return "student id: " + student + " got another lecture in that time";
                 }
             }
 
 
+            return "true";
+        }
+        public string is_course_ok(FormCollection collection,string student_id, string b)
+        {
+            string _id = collection["Course_ID"];
+            string name = collection["Name"];
+            string Lecturer_ID = collection["Lecturer_ID"];
+            string MoedA = collection["MoedA"];
+            string MoedA_classroom = collection["MoedA_classroom"];
+            string MoedB = collection["MoedB"];
+            string MoedB_classroom = collection["MoedB_classroom"];
+            string Day = collection["Day"];
+            int start = Course.getHourAsInt(collection["start"]);
+            int end = Course.getHourAsInt(collection["end"]);
+            string classroom = collection["classroom"];
+
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.course_collection =
+                Models.MongoHelper.database.GetCollection<Models.Course>("Course");
+
+            //check if the student got time for this course
+            Schedule schedule = GetSchedule(student_id);
+            int lstart = start;
+            int lend = end;
+            int day = Course.getDayAsInt(Day);
+            bool condition = true;
+            for (int i = lstart; i < lend; i++)
+            {
+                if (schedule.getHour(day, i).Equals("Empty"))
+                {
+                    condition = false;
+                }
+                else if(schedule.getHour(day, i).Equals(name))
+                {
+                    condition = false;
+                }
+                if(condition)
+                    return "this student is taken in those hours.";
+            }
             return "true";
         }
     }

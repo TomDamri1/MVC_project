@@ -3,40 +3,58 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace MVC_project.Models
 {
     public class Course
     {
+        [Required(ErrorMessage = "This Field is Requried")]
         public Object _id { get; set; }
 
+        [Required(ErrorMessage = "This Field is Requried")]
+        [RegularExpression(@"c_([0-9])+", ErrorMessage = "cource id must be in the format: \"c_[numbers]\"")]
         public string Course_ID { set; get; }
 
+        [Required(ErrorMessage = "This Field is Requried")]
+        [RegularExpression(@"([0-9])+", ErrorMessage = "Lecturer id must contain only numbers.")]
         public string Lecturer_ID { set; get; }
 
+        [Required(ErrorMessage = "This Field is Requried")]
         public string Name { set; get; }
 
+        [Required(ErrorMessage = "This Field is Requried")]
+        [RegularExpression(@"(((0|1)[0-9]|2[0-9]|3[0-1])\/(0[1-9]|1[0-2])\/((19|20)\d\d))$", ErrorMessage = "The date must to be in the format: dd/mm/yyyy")]
         public string MoedA { set; get; }
 
+        [Required(ErrorMessage = "This Field is Requried")]
+        [RegularExpression(@"(((0|1)[0-9]|2[0-9]|3[0-1])\/(0[1-9]|1[0-2])\/((19|20)\d\d))$", ErrorMessage = "The date must to be in the format: dd/mm/yyyy")]
         public string MoedB { set; get; }
 
+        [Required(ErrorMessage = "This Field is Requried")]
+        [RegularExpression(@"(monday|sunday|tuesday|wednesday|thursday|friday|saturday)$", ErrorMessage = "must be a valid day name in small letters like \"sunday\"")]
         public string Day { set; get; }
 
+        [RegularExpression(@"([0-1][0-9]:00)|(20:00)", ErrorMessage = "must be a valid full hour between 08:00 to 20:00")]
+        [Required(ErrorMessage = "This Field is Requried")]
         public string start { set; get; }
 
+        [Required(ErrorMessage = "This Field is Requried")]
+        [RegularExpression(@"(09:00)|(1[0-9]:00)|(2[0-1]:00)", ErrorMessage = "must be a valid full hour between 09:00 to 21:00")]
         public string end { set; get; }
 
+        [Required(ErrorMessage = "This Field is Requried")]
         public string classroom { set; get; }
 
+        [Required(ErrorMessage = "This Field is Requried")]
         public string MoedA_classroom { set; get; }
 
+        [Required(ErrorMessage = "This Field is Requried")]
         public string MoedB_classroom { set; get; }
 
         public List<string> student_list { get; set; }
-
         public List<string> grade_list { get; set; }
-
         public List<string> grade_listB { get; set; }
 
         public static int getDayAsInt(string day)

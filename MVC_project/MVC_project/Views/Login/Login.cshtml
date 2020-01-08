@@ -31,18 +31,18 @@
 
 
     <form action="Login/LoginPressed" method="post">
-        <label>User Name:</label><input type="text" id="UserName" name="UserName" style="margin:10px ; padding:10px; border-radius:10px 10px 10px 10px;" />
+      
+        <label>User Name:</label> @Html.TextBoxFor(Model => Model.UserName, new { Class = "loginfield"})
         <br />
         <section style="color:red">
             @Html.ValidationMessageFor(x => x.UserName)
         </section>
-
-        <label>Password:</label><input type="password" id="Password" name="Password" style="margin:10px ; padding:10px; border-radius:10px 10px 10px 10px; margin-left:15px;" />
-
+        <label>Password:</label> @Html.TextBoxFor(Model => Model.Password, new { Class = "loginfield", Style = "margin-left:16px", type="password" })
         <br />
         <section style="color:red">
             @Html.ValidationMessageFor(x => x.Password)
         </section>
+        <br />
 
         <input class="btn btn-primary btn-lg" style="margin:10px ; padding:10px; width: 100px" id="Login" type="submit" value="Login" />
 
