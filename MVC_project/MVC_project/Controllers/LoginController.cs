@@ -19,13 +19,20 @@ namespace MVC_project.Controllers
         // GET: Login/Details/5
         public ActionResult Details(string id)
         {
-            Models.MongoHelper.ConnectToMongoService();
-            Models.MongoHelper.login_collection =
-                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+            try
+            {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.login_collection =
+                    Models.MongoHelper.database.GetCollection<Models.Login>("Login");
 
-            var filter = Builders<Models.Login>.Filter.Eq("_id", id);
-            var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
-            return View(result);
+                var filter = Builders<Models.Login>.Filter.Eq("_id", id);
+                var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
+                return View(result);
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         // GET: Login/Create
@@ -68,14 +75,21 @@ namespace MVC_project.Controllers
         // GET: Login/Edit/5
         public ActionResult Edit(string id)
         {
-            Models.MongoHelper.ConnectToMongoService();
-            Models.MongoHelper.login_collection =
-                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+            try
+            {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.login_collection =
+                    Models.MongoHelper.database.GetCollection<Models.Login>("Login");
 
-            var filter = Builders<Models.Login>.Filter.Eq("_id", id);
-            var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
-            TempData["Course_list"] = result.course_list;
-            return View(result);
+                var filter = Builders<Models.Login>.Filter.Eq("_id", id);
+                var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
+                TempData["Course_list"] = result.course_list;
+                return View(result);
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         // POST: Login/Edit/5
@@ -109,13 +123,20 @@ namespace MVC_project.Controllers
         // GET: Login/Edit/5
         public ActionResult AddCourse(string id)
         {
-            Models.MongoHelper.ConnectToMongoService();
-            Models.MongoHelper.login_collection =
-                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+            try
+            {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.login_collection =
+                    Models.MongoHelper.database.GetCollection<Models.Login>("Login");
 
-            var filter = Builders<Models.Login>.Filter.Eq("_id", id);
-            var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
-            return View(result);
+                var filter = Builders<Models.Login>.Filter.Eq("_id", id);
+                var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
+                return View(result);
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         // POST: Login/Edit/5
@@ -140,13 +161,20 @@ namespace MVC_project.Controllers
         // GET: Login/Delete/5
         public ActionResult Delete(string id)
         {
-            Models.MongoHelper.ConnectToMongoService();
-            Models.MongoHelper.login_collection =
-                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+            try
+            {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.login_collection =
+                    Models.MongoHelper.database.GetCollection<Models.Login>("Login");
 
-            var filter = Builders<Models.Login>.Filter.Eq("_id", id);
-            var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
-            return View(result);
+                var filter = Builders<Models.Login>.Filter.Eq("_id", id);
+                var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
+                return View(result);
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         // POST: Login/Delete/5
@@ -173,14 +201,21 @@ namespace MVC_project.Controllers
 
         public ActionResult LoginData()
         {
-            Models.MongoHelper.ConnectToMongoService();
-            Models.MongoHelper.login_collection =
-                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+            try
+            {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.login_collection =
+                    Models.MongoHelper.database.GetCollection<Models.Login>("Login");
 
-            var filter = Builders<Models.Login>.Filter.Ne("_id", "");
-            var result = Models.MongoHelper.login_collection.Find(filter).ToList();
+                var filter = Builders<Models.Login>.Filter.Ne("_id", "");
+                var result = Models.MongoHelper.login_collection.Find(filter).ToList();
 
-            return View(result);
+                return View(result);
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         public ActionResult LoginPressed()
@@ -257,10 +292,17 @@ namespace MVC_project.Controllers
 
         public ActionResult Schedule(string id)
         {
-            coding.connection connection = new coding.connection();
-            Models.Schedule schedule = connection.GetSchedule(id);
-            Session["Schedule"] = schedule;
-            return View();
+            try
+            {
+                coding.connection connection = new coding.connection();
+                Models.Schedule schedule = connection.GetSchedule(id);
+                Session["Schedule"] = schedule;
+                return View();
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
     }
 }
