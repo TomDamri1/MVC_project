@@ -95,6 +95,14 @@ namespace MVC_project.coding
             Models.MongoHelper.ConnectToMongoService();
             Models.MongoHelper.course_collection =
                 Models.MongoHelper.database.GetCollection<Models.Course>("Course");
+            //check if id is ok
+            var id_filter = Builders<Models.Course>.Filter.Eq("_id", _id);
+            var id_filter_course = Models.MongoHelper.course_collection.Find(id_filter).FirstOrDefault();
+            if (id_filter_course != null)
+            {
+                return "there is a course with the same id.";
+            }
+
 
             //check if the name is ok
             var name_filter = Builders<Models.Course>.Filter.Eq("Name", name);
@@ -380,8 +388,8 @@ namespace MVC_project.coding
             Models.MongoHelper.course_collection =
                 Models.MongoHelper.database.GetCollection<Models.Course>("Course");
 
-            //check if the name is ok
-            var filter = Builders<Models.Course>.Filter.Ne("_id",_id); 
+            //check if the course ok for the students
+            var filter = Builders<Models.Course>.Filter.Eq("_id",_id); 
             var course = Models.MongoHelper.course_collection.Find(filter).FirstOrDefault();
             List<string> students = course.student_list.ToList();
             foreach (string student in students)
@@ -431,7 +439,23 @@ namespace MVC_project.coding
                 }
                 if(condition)
                     return "this student is taken in those hours.";
+                condition = true;
             }
+            return "true";
+        }
+
+        public string is_user_ok(FormCollection collection)
+        {
+            string user_id = collection["id"];
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.login_collection =
+                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+            var filter2 = Builders<Models.Login>.Filter.Eq("_id", user_id);
+            var user = Models.MongoHelper.login_collection.Find(filter2).FirstOrDefault();
+
+            if (user != null)
+                return "there is a user with the same id!";
+
             return "true";
         }
     }

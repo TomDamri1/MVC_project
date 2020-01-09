@@ -52,7 +52,13 @@ namespace MVC_project.Controllers
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.login_collection =
                     Models.MongoHelper.database.GetCollection<Models.Login>("Login");
-
+                coding.connection connection = new coding.connection();
+                string check_result = connection.is_user_ok(collection);
+                if (!check_result.Equals("true"))
+                {
+                    ViewBag.Error = check_result;
+                    return View("Error");
+                }
                 Models.MongoHelper.login_collection.InsertOneAsync(new Models.Login {
                     FirstName = collection["FirstName"],
                     LastName = collection["LastName"],
@@ -64,7 +70,7 @@ namespace MVC_project.Controllers
                     course_list = new List<string> (),
                 });
 
-                return RedirectToAction("Index");
+                return RedirectToAction("admin");
             }
             catch
             {
@@ -112,7 +118,7 @@ namespace MVC_project.Controllers
                     .Set("Password", collection["Password"]);
                 var result = Models.MongoHelper.login_collection.UpdateOneAsync(filter, update);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("admin");
             }
             catch
             {
@@ -148,7 +154,7 @@ namespace MVC_project.Controllers
                 var course = Request.Form["course_to_add"];
                 Course.addCourseToID(course.ToString(), id);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("admin");
             }
             catch
             {
@@ -191,7 +197,7 @@ namespace MVC_project.Controllers
 
                 var result = Models.MongoHelper.login_collection.DeleteOneAsync(filter);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("admin");
             }
             catch
             {
