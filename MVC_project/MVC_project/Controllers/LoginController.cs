@@ -152,7 +152,13 @@ namespace MVC_project.Controllers
             try
             {
                 var course = Request.Form["course_to_add"];
-                Course.addCourseToID(course.ToString(), id);
+                string check_result = Course.addCourseToID(course.ToString(), id);
+                if (!check_result.Equals("true"))
+                {
+                    ViewBag.Error = check_result;
+                    return View("Error");
+                }
+                    
 
                 return RedirectToAction("admin");
             }
