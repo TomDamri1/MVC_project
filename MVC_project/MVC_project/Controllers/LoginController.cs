@@ -47,8 +47,6 @@ namespace MVC_project.Controllers
         {
             try
             {
-                
-
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.login_collection =
                     Models.MongoHelper.database.GetCollection<Models.Login>("Login");
@@ -59,6 +57,15 @@ namespace MVC_project.Controllers
                     ViewBag.Error = check_result;
                     return View("Error");
                 }
+                var filter = Builders<Models.Login>.Filter.Eq("UserName", collection["UserName"]);
+                var result = Models.MongoHelper.login_collection.Find(filter).FirstOrDefault();
+                if (result != null)
+                {
+                    ViewBag.Error = "there is a user with the same user-name";
+                    return View("Error");
+                }
+
+
                 Models.MongoHelper.login_collection.InsertOneAsync(new Models.Login {
                     FirstName = collection["FirstName"],
                     LastName = collection["LastName"],
