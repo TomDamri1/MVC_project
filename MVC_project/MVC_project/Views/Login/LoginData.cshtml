@@ -70,20 +70,18 @@
                 {
                     if (Session["Type"].ToString().ToLower().Equals("admin"))
                     {
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item._id }) |
-                            @Html.ActionLink("Details", "Details", new { id = item._id }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item._id }) |
-                            @if (!item.Type.ToString().Equals("student"))
-                            {
-                            }
-                            else
-                            {
-                                Html.ActionLink("AddCourse", "AddCourse", new { id = item._id });
-                            }
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item._id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item._id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item._id }) |
+                    @if (item.Type.ToString().Equals("student"))
+                    {
+                        @Html.ActionLink("AddCourse", "AddCourse", new { id = item._id });
+                    }
+                  
 
 
-                    </td>
+                </td>
                     }
                 }
                 catch { }
