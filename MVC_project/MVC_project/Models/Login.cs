@@ -16,6 +16,7 @@ namespace MVC_project.Models
         public string Password { get; set; }
 
         [Required(ErrorMessage = "This Field is Requried")]
+        [RegularExpression(@"(lecturer|student|admin)$", ErrorMessage = "use lecturer|student|admin")]
         public string Type { get; set; }
 
         [Required(ErrorMessage = "This Field is Requried")]

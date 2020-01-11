@@ -48,7 +48,7 @@ namespace MVC_project.Controllers
         {
             try
             {
-                //assign lecturer automaticly ------------ TODO!
+                
 
                 coding.connection checker = new coding.connection();
                 string check_result = checker.is_course_ok(collection);
@@ -120,6 +120,7 @@ namespace MVC_project.Controllers
                 string check_result = connection.is_course_ok_after_edit(collection);
                 if (check_result.Equals("true"))
                 {
+                    connection.delete_course_from_all_lecturers(id);
                     var filter = Builders<Models.Course>.Filter.Eq("_id", id);
                     var update = Builders<Models.Course>.Update
                         .Set("Lecturer_ID", collection["Lecturer_ID"])
@@ -135,7 +136,12 @@ namespace MVC_project.Controllers
 
 
                     var result = Models.MongoHelper.course_collection.UpdateOneAsync(filter, update);
-
+                    check_result = Course.addCourseToID(collection["Course_ID"], collection["Lecturer_ID"]);
+                    if (!check_result.Equals("true"))
+                    {
+                        ViewBag.Error = check_result;
+                        return View("Error");
+                    }
                     return RedirectToAction("CourseData");
                 }
                 else

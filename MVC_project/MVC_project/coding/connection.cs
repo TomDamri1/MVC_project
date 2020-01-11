@@ -103,6 +103,17 @@ namespace MVC_project.coding
                 return "there is a course with the same id.";
             }
 
+            //check if the lecturer is a lecturer
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.login_collection =
+                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+            var lecturer_filter = Builders<Models.Login>.Filter.Eq("_id", Lecturer_ID);
+            var lectuerer = Models.MongoHelper.login_collection.Find(lecturer_filter).FirstOrDefault();
+            if (!lectuerer.Type.Equals("lecturer"))
+            {
+                return "the lecturer you assigned is not realy a lecturer";
+            }
+
 
             //check if the name is ok
             var name_filter = Builders<Models.Course>.Filter.Eq("Name", name);
@@ -384,6 +395,18 @@ namespace MVC_project.coding
                 return check_result;
             }
 
+            //check if the lecturer is a lecturer
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.login_collection =
+                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+            var lecturer_filter = Builders<Models.Login>.Filter.Eq("_id", Lecturer_ID);
+            var lectuerer = Models.MongoHelper.login_collection.Find(lecturer_filter).FirstOrDefault();
+            if (!lectuerer.Type.Equals("lecturer"))
+            {
+                return "the lecturer you assigned is not realy a lecturer";
+            }
+
+
             Models.MongoHelper.ConnectToMongoService();
             Models.MongoHelper.course_collection =
                 Models.MongoHelper.database.GetCollection<Models.Course>("Course");
@@ -403,6 +426,7 @@ namespace MVC_project.coding
 
             return "true";
         }
+
         public string is_course_ok(FormCollection collection,string student_id, string b)
         {
             string _id = collection["Course_ID"];
@@ -457,6 +481,36 @@ namespace MVC_project.coding
                 return "there is a user with the same id!";
 
             return "true";
+        }
+
+        public bool delete_course_from_all_lecturers(string course_id)
+        {
+            //get all the lecturers
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.login_collection =
+                Models.MongoHelper.database.GetCollection<Models.Login>("Login");
+            var lecturer_filter = Builders<Models.Login>.Filter.Eq("Type", "lecturer");
+            var lecturers = Models.MongoHelper.login_collection.Find(lecturer_filter).ToList();
+            foreach (Login lecturer in lecturers)
+            {
+                if (lecturer.course_list.Contains(course_id))
+                {
+                    lecturer.course_list.Remove(course_id);
+                    var filter = Builders<Models.Login>.Filter.Eq("_id", lecturer._id);
+                    var update = Builders<Models.Login>.Update
+                        .Set("FirstName", lecturer.FirstName)
+                        .Set("LastName", lecturer.LastName)
+                        .Set("_id", lecturer._id)
+                        .Set("ID", lecturer._id)
+                        .Set("UserName", lecturer.UserName)
+                        .Set("Type", lecturer.Type)
+                        .Set("Password", lecturer.Password)
+                        .Set("course_list",lecturer.course_list);
+                    var result = Models.MongoHelper.login_collection.UpdateOneAsync(filter, update);
+                }
+            }
+
+            return true;
         }
     }
 }
