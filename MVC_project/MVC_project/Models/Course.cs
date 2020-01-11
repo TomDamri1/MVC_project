@@ -141,7 +141,7 @@ namespace MVC_project.Models
                 var update_course = Builders<Models.Course>.Update
                         .Set("student_list", student_list)
                         .Set("grade_list", grade_list)
-                        .Set("grade_listB",grade_list);
+                        .Set("grade_listB",grade_listB);
 
                 var result_course = Models.MongoHelper.course_collection.UpdateOneAsync(course_filter, update_course);
             }
